@@ -15,27 +15,32 @@ class CommentParser
         $content = file_get_contents($file);
         if(preg_match_all("#\/\*{2}(.*)\*\/#sSU",$content,$m) && isset($m[1])){
             $info = [];
+            $package = '';
             foreach ($m[1] as $comm){
-                if(!preg_match('#@url#m',$comm)) continue;
+                if(empty($info) && preg_match('#@package\s+(.*)#m',$comm,$m)){
+                    $package = $m[1];
+                }
+                if(!preg_match('#@url#m',$comm) || !preg_match('#@method#m',$comm)) continue;
                 $lineEOF = (strpos($comm,"\r\n") === false) ? "\n":"\r\n";
                 $lines = explode($lineEOF,$comm);
                 $api = [
                     'description' => [],
-                    'module' => '',
-                    'title'  => '',
-                    'url'    => '',
-                    'method' => '',
-                    'author' => '',
-                    'param' => [],
-                    'return' => [],
-                    'lastLabel' => ''
+                    'package'     => '',
+                    'title'       => '',
+                    'url'         => '',
+                    'method'      => '',
+                    'author'      => '',
+                    'param'       => [],
+                    'return'      => [],
+                    'lastLabel'   => ''
                 ];
                 foreach ($lines as $line){
                     static::parseLine($api,$line);
                 }
-                if(!$api['module']) {
-                    $api['module'] = APP::getAppConf($app)->getModName($mod);
+                if(!$api['package']) {
+                    $api['package'] = $package ?: APP::getAppConf($app)->getModName($mod);
                 }
+                $api['md5'] = md5($api['url'].$api['method']);
                 $info[] = $api;
             }
             return $info;
@@ -45,7 +50,7 @@ class CommentParser
 
     static private function parseLine(&$api,$line)
     {
-        $line = trim(substr(trim($line),1));
+        $line = substr(trim($line),1);
         if(!$line) return;
         if(strpos($line,'@') === false){
             if($api['lastLabel'] == 'docreturn'){
@@ -59,7 +64,7 @@ class CommentParser
                 switch ($m[1]) {
                     case 'title':
                     case 'author':
-                    case 'module':
+                    case 'package':
                     case 'url':
                     case 'method':
                         $api[$m[1]] =  $m[2];

@@ -72,11 +72,13 @@ class APP
 
     static public function run($app,$mod,$api)
     {
-        $modName = APP::getAppConf($app)->getModName($mod);
         ob_clean();
         if($api){
-
+            $apiInfo = CacheReadWriter::getApiCache($app,$mod,$api);
+//            var_dump($apiInfo);
+            require VIEW_PATH . 'api.php';
         }else{
+            $modName = APP::getAppConf($app)->getModName($mod);
             $list = CacheReadWriter::getListCache($app,$mod);
             require VIEW_PATH . 'index.php';
         }

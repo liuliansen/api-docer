@@ -86,6 +86,34 @@ class CacheReadWriter
         file_put_contents($indexCacheFile,json_encode($index));
     }
 
+
+    /**
+     * 读取指定接口信息
+     * @param $app
+     * @param $mod
+     * @param $apiMd5
+     * @return bool|mixed
+     */
+    static public function getApiCache($app,$mod,$apiMd5)
+    {
+        $indexCacheFile = static::getFileInfoCacheFile($app,$mod,'index');
+        $data = file_get_contents($indexCacheFile);
+        if($data) {
+            if(($json = json_decode($data)) && $json){
+                $arr = iterable2Array($json);
+                foreach ($arr as $md5 => $cacheFile){
+                    if($md5 == $apiMd5){
+                        $cache = static::readApiFileCache($app,$mod,$cacheFile);
+                        foreach ($cache as $item){
+                            if($item['md5'] == $apiMd5) return $item;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * 生成api文件解析缓存
      * @param $app
@@ -146,6 +174,23 @@ class CacheReadWriter
         file_put_contents($cacheFile, json_encode($info,JSON_UNESCAPED_UNICODE));
     }
 
+    /**
+     * 读取指定的api缓存文件数据
+     * @param $app
+     * @param $mod
+     * @param $cacheFile
+     * @return array|bool
+     */
+    static public function readApiFileCache($app,$mod,$cacheFile)
+    {
+        if(!is_file($cacheFile)) return false;
+        $data = file_get_contents($cacheFile);
+        if(!$data)  return false;
+        $json = json_decode($data);
+        if(!$json) return false;
+        return iterable2Array($json);
+    }
+
 
     /**
      * 生成模块api列表缓存
@@ -165,10 +210,10 @@ class CacheReadWriter
                 if($json) {
                     $apis = iterable2Array($json);
                     foreach ($apis as $api){
-                        if(isset($modules[$api['module']])){
-                            $modules[$api['module']][md5($api['url'].$api['method'])] = $api['title'];
+                        if(isset($modules[$api['package']])){
+                            $modules[$api['package']][md5($api['url'].$api['method'])] = $api['title'];
                         }else{
-                            $modules[$api['module']] = [
+                            $modules[$api['package']] = [
                                 md5($api['url'].$api['method']) => $api['title']
                             ];
                         }

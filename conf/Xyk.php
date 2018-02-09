@@ -11,6 +11,12 @@ namespace conf;
 class Xyk extends Base
 {
 
+    protected $serverInfo = [
+        'product_server' => 'http://xykapi.jrweid.com',
+        'test_server' => 'http://113.102.103.11:8080',
+
+    ];
+
     protected $root = '/var/www/html/tp5/application/';
 
     protected $modules = [
