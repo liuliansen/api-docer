@@ -15,37 +15,66 @@
     <link href="/assets/css/custom.css" rel="stylesheet" />
     <!-- GOOGLE FONTS-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <style>
+        .info-head {
+            font-size: 20px;
+            max-width: 200px;
+        }
+        .info-body {
+            font-size: 20px;
+        }
+    </style>
 </head>
-<body style="background: #ffffff;padding: 5px;">
-<div class="row">
+<body style=";padding: 5px;">
+<div class="row" style="margin:0 !important;">
     <div class="col-md-12">
         <div class="panel panel-primary">
-            <div class="panel-heading">
-                接口信息
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div style="margin:10px;font-size:16px;">
-                            接口名称: <span style="font-size: 20px;font-weight: bolder;">
-                                <?php echo $apiInfo['title']?></span></div>
-                        <div style="margin:10px;font-size:16px;">
-                            接口地址: <span style="font-size: 20px;font-weight: bolder;"> <a>
-                                    <?php echo $apiInfo['url']?></a></span>
-                        </div>
-                        <div style="margin:10px;font-size:16px;">
-                            接口作者: <span style="font-size: 20px;font-weight: bolder;">
-                                <?php echo htmlentities($apiInfo['author'])?></span></div>
-                        <div style="margin:10px;font-size:16px;">
-                            请求类型: <span style="font-size: 20px;font-weight: bolder;">
-                                <span class="label label-danger" style="margin-bottom: 10px;">
-                                    <?php echo strtoupper($apiInfo['method'])?></span></div>
-                        <div style="margin:10px;font-size:16px;">
-                            <div style="font-size: 20px;font-weight: bolder;">接口说明: </div>
-                            <div style="padding: 10px;"><?php echo implode('',$apiInfo['description'])?></div>
-                        </div>
-                    </div>
-                </div>
+                <table class="table table-striped table-bordered table-hover" style="margin-bottom: 20px;">
+                    <tr>
+                        <td class="info-head">接口名称</td>
+                        <td class="info-body">
+                            <span style="color:#D9362C;">
+                                <?php echo $apiInfo['title']?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="info-head">接口地址</td>
+                        <td class="info-body">
+                            正式：
+                            <span style="font-size: 20px;font-weight: bolder;">
+                                <a><?php echo $servInfo['product_server'].$apiInfo['url']?></a>
+                            </span><br/>
+                            测试：
+                            <span style="font-size: 20px;font-weight: bolder;">
+                                <a><?php echo $servInfo['test_server'].$apiInfo['url']?></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="info-head">请求类型</td>
+                        <td class="info-body">
+                            <span class="label label-danger" style="margin-bottom: 10px;">
+                                <?php echo strtoupper($apiInfo['method'])?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="info-head">接口作者</td>
+                        <td class="info-body">
+                            <span style="font-size: 20px;font-weight: bolder;">
+                                <?php echo htmlentities($apiInfo['author'])?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="info-head">接口说明</td>
+                        <td class="info-body">
+                            <?php echo implode('',$apiInfo['description'])?>
+                        </td>
+                    </tr>
+                </table>
+
                 <div class="row" style="margin-top: 10px;">
                     <div class="col-md-12">
                         <div class="panel panel-default">
@@ -53,7 +82,7 @@
                                 <div style="font-size: 20px;font-weight: bolder;">请求参数</div>
                             </div>
                             <div class="panel-body">
-                                <table class="table table-hover">
+                                <table class="table table-hover  alert alert-success">
                                     <thead>
                                     <tr>
                                         <th>#</th>

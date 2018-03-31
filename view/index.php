@@ -16,103 +16,103 @@
     <!-- GOOGLE FONTS-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 </head>
-<body>
-    <div id="wrapper">
-        <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0;height:">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <span class="navbar-brand">接口列表</span>
-            </div>
+<body style="width: 100%">
+<div style="width:100%;height:100%;display:flex;">
+    <div style="float:left;width: 300px;height: 100%; background: #000;padding-top: 50px;padding-bottom:20px;position: relative;">
+        <div style="position:absolute;top:0;left:0;width:100%;height:50px;color:#ffffff;font-size:20px;font-weight:bolder;line-height:50px;background: #1E60B8;">
+            <span style="margin-left: 30px;">
+                <a id="goto-main" style="color:#fff;cursor: pointer;">
+                    <?php echo $appModuleName?>接口列表
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                </a>
+            </span>
+        </div>
+        <div style="overflow-y: auto;height:100%;width:300px;">
+            <nav class="navbar-default" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="main-menu">
+                        <?php   foreach($list as $package => $item) { ?>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-desktop "></i>
+                                    <?php echo $package?>
+                                    <span class="fa arrow"></span>
+                                </a>
+                                <ul class="nav nav-second-level">
+                                    <?php foreach ($item as $md5 => $title) { ?>
+                                        <li>
+                                            <a class="api-url" href="#" data-url="/<?php echo $app,'/',$mod,'/',$md5 ?>">
+                                                <i class="fa fa-toggle-on"></i>
+                                                <?php echo $title?>
+                                            </a>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            </li>
+                        <?php } ?>
+                        <!--                        <a class="active-menu" href="#"><i class="fa fa-desktop "></i>UI Elements <span class="fa arrow"></span></a>-->
 
-            <div class="header-right">
-                <div class="input-group">
-                    <input type="text" placeholder="输入关键字查询" class="form-control">
+                    </ul>
+
+                </div>
+
+            </nav>
+        </div>
+        <div style="position:absolute;bottom:0;left:0;width:100%;height:20px;font-weight:bolder;line-height:20px;background: #ccc;">
+            ©我爱微点-LianSen&lt;liansen@d3zz.com&gt;
+        </div>
+    </div>
+    <div style="float:left;flex:1;height: 100%;position: relative;padding-top: 50px;background: #ccc;">
+        <div style="width:100%;height:50px;position:absolute;top:0;left:0;color:#ffffff;font-size:20px;font-weight:bolder;background: #0000ff;">
+            <div style="float: right;margin-right: 20px;height: 100%;margin-top: 10px;">
+                <div class="input-group" >
+                    <input type="text" placeholder="输入关键字查询" class="form-control" id="input-search">
                     <span class="form-group input-group-btn">
-                        <button class="btn btn-default" type="button">
+                        <button class="btn btn-default" type="button" id="btn-search">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>
                     </span>
                 </div>
-<!--                <span>Power by LianSen@我爱微点</span>-->
             </div>
-        </nav>
-        <!-- /. NAV TOP  -->
-        <nav class="navbar-default navbar-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav" id="main-menu">
-                    <?php   foreach($list as $package => $item) { ?>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-desktop "></i>
-                                <?php echo $package?>
-                                <span class="fa arrow"></span>
-                            </a>
-                            <ul class="nav nav-second-level">
-                            <?php foreach ($item as $md5 => $title) { ?>
-                                <li>
-                                    <a class="api-url" href="#" data-url="/<?php echo $app,'/',$mod,'/',$md5 ?>">
-                                        <i class="fa fa-toggle-on"></i>
-                                        <?php echo $title?>
-                                    </a>
-                                </li>
-                            <?php } ?>
-                            </ul>
-                        </li>
-                    <?php } ?>
-<!--                        <a class="active-menu" href="#"><i class="fa fa-desktop "></i>UI Elements <span class="fa arrow"></span></a>-->
-
-                </ul>
-
-            </div>
-
-        </nav>
-        <!-- /. NAV SIDE  -->
-        <div id="page-wrapper">
-            <!-- /. PAGE INNER  -->
-            <iframe id="api-page" frameborder="0" width="100%" height="100%" src="">
-
-            </iframe>
         </div>
-        <!-- /. PAGE WRAPPER  -->
+        <div style="margin:0;height: 100%; padding: 0;">
+            <!-- /. PAGE INNER  -->
+            <iframe id="api-page" frameborder="0" width="100%" height="100%" src="/<?php echo $app,'/',$mod,'/__main' ?>" style="display:block;">            </iframe>
+        </div>
     </div>
-    <!-- /. WRAPPER  -->
-
-<!--    <div id="footer-sec">-->
-<!--        LianSen@我爱微点-->
-<!--    </div>-->
-    <!-- /. FOOTER  -->
-    <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
-    <!-- JQUERY SCRIPTS -->
-    <script src="/assets/js/jquery-1.10.2.js"></script>
-    <!-- BOOTSTRAP SCRIPTS -->
-    <script src="/assets/js/bootstrap.js"></script>
-    <!-- METISMENU SCRIPTS -->
-    <script src="/assets/js/jquery.metisMenu.js"></script>
-       <!-- CUSTOM SCRIPTS -->
-    <script src="/assets/js/custom.js"></script>
-    
-
+</div>
 
 </body>
+<script src="/assets/js/jquery-1.10.2.js"></script>
+<!-- BOOTSTRAP SCRIPTS -->
+<script src="/assets/js/bootstrap.js"></script>
+<!-- METISMENU SCRIPTS -->
+<script src="/assets/js/jquery.metisMenu.js"></script>
+<!-- CUSTOM SCRIPTS -->
+<script src="/assets/js/custom.js"></script>
 <script>
-    function updatePageHeight()
-    {
-        var height = document.body.clientHeight - $('.navbar-cls-top:first').height();
-        $('#page-wrapper').css('height',height+'px');
-    }
-    $(document).ready(function(){
-        updatePageHeight();
-        $('.api-url').on('click',function(){
-            $('#page-wrapper').css('height',$(document).height()+'px');
-            $('#api-page').attr('src',$(this).data('url'));
-            $('.api-url').removeClass('active-menu');
-            $(this).addClass('active-menu');
-        });
+    $('.api-url').on('click',function(){
+        $('#api-page').attr('src',$(this).data('url'));
+        $('.api-url').removeClass('active-menu');
+        $(this).addClass('active-menu');
     });
+
+    $('#goto-main').on('click',function(){
+        $('#api-page').attr('src',"/<?php echo $app,'/',$mod,'/__main' ?>");
+        $('.api-url').removeClass('active-menu');
+    });
+
+
+    $('#btn-search').click(function(e){
+
+    });
+    $('#input-search').keypress(function(e){
+        
+    });
+
+    function search()
+    {
+
+    }
 </script>
 </html>

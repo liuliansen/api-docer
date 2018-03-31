@@ -8,6 +8,7 @@
 //+-------------------------------------------------------------
 namespace lib;
 
+use conf\Base;
 use ReflectionClass;
 
 class APP
@@ -44,7 +45,7 @@ class APP
     /**
      * 获取app的配置对象
      * @param $app
-     * @return object
+     * @return Base
      */
     static public function getAppConf($app)
     {
@@ -57,8 +58,33 @@ class APP
         static::$urlType = isset($_SERVER['PATH_INFO']) ? 0:1;
         static::createDir();
         list($app,$mod,$api) =  static::getPath();
-        if($api){ //查看具体接口文档
-        }else{   //获取指定模块的接口列表
+        static::run($app,$mod,$api);
+    }
+
+    static public function run($app,$mod,$api)
+    {
+        ob_clean();
+        $conf = APP::getAppConf($app);
+        if($api){
+            $servInfo = $conf->getServerInfo();
+            if($api == '__main'){
+                $list = CacheReadWriter::getListCache($app,$mod);
+                $moduleQty = count($list);
+                $apiQty = 0;
+                foreach ($list as $item){
+                    $apiQty+= count($item);
+                }
+                $globalAppParams = $conf->getGlobalAppParams();
+                $globalApiParams = $conf->getGlobalApiParams();
+                $globalDesc      = $conf->getGlobalDesc();
+                require VIEW_PATH . 'main.php';
+            }elseif($api == '__search'){
+                require VIEW_PATH . 'search.php';
+            }else{
+                $apiInfo = CacheReadWriter::getApiCache($app,$mod,$api);
+                require VIEW_PATH . 'api.php';
+            }
+        }else{
             try {
                 $files = FileReader::getModuleFiles($app, $mod);
             }catch (\ReflectionException $ex){
@@ -66,20 +92,9 @@ class APP
                 exit;
             }
             CacheReadWriter::createRunCache($app,$mod,$files);
-        }
-        static::run($app,$mod,$api);
-    }
-
-    static public function run($app,$mod,$api)
-    {
-        ob_clean();
-        if($api){
-            $apiInfo = CacheReadWriter::getApiCache($app,$mod,$api);
-//            var_dump($apiInfo);
-            require VIEW_PATH . 'api.php';
-        }else{
-            $modName = APP::getAppConf($app)->getModName($mod);
+            $modName = $conf->getModName($mod);
             $list = CacheReadWriter::getListCache($app,$mod);
+            $appModuleName = $conf->getModName($mod);
             require VIEW_PATH . 'index.php';
         }
         ob_end_flush();

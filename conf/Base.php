@@ -21,9 +21,18 @@ abstract class Base
 
     protected $moduleNames = [];
 
+    protected $globalAppParams = [ ];
+    protected $globalApiParams = [ ];
+    protected $globalDesc      = '';
+
     public function getRoot()
     {
         return $this->root;
+    }
+
+    public function getGlobalDesc()
+    {
+        return $this->globalDesc;
     }
 
     public function get($mod)
@@ -41,5 +50,14 @@ abstract class Base
         if($key)
             return isset($this->serverInfo[$key]) ? $this->serverInfo[$key]:null;
         return $this->serverInfo;
+    }
+
+    public function getGlobalAppParams()
+    {
+        return $this->globalAppParams;
+    }
+    public function getGlobalApiParams()
+    {
+        return $this->globalApiParams;
     }
 }
