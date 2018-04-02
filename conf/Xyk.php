@@ -13,7 +13,7 @@ class Xyk extends Base
 
     protected $serverInfo = [
         'product_server' => 'http://xykapi.jrweid.com',
-        'test_server' => 'http://113.102.103.11:8080',
+        'test_server' => 'http://112.124.104.103:8080',
 
     ];
 

@@ -132,7 +132,7 @@ class APP
             CacheReadWriter::createRunCache($app,$mod,$files);
             $modName = $conf->getModName($mod);
             $list = CacheReadWriter::getListCache($app,$mod);
-            $appModuleName = '未归类接口';
+            $appModuleName = $conf->getModName($mod);
             require VIEW_PATH . 'index.php';
         }
         ob_end_flush();

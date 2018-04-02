@@ -210,10 +210,6 @@ class CacheReadWriter
                 if($json) {
                     $apis = iterable2Array($json);
                     foreach ($apis as $api){
-                        //                        if($api['module']=='测试'){
-//                            var_dump($api);
-//                            var_dump($modules[$api['module']]);
-//                        }
                         if(isset($modules[$api['module']])){
                             $modules[$api['module']][md5($api['url'].$api['method'])] = $api['title'];
                         }else{
@@ -225,6 +221,9 @@ class CacheReadWriter
                 }
             }
         }
+        uksort($modules,function($a,$b){
+            return strcmp($a,$b);
+        });
         $lisCacheFile = static::getAppModCachePath($app,$mod).'list.cache';
         file_put_contents($lisCacheFile, json_encode($modules,JSON_UNESCAPED_UNICODE));
     }

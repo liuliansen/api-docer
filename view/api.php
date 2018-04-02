@@ -43,12 +43,20 @@
             <tr>
                 <td class="info-head">接口地址</td>
                 <td class="info-body">
+                   <span style="font-size: 20px;font-weight: bolder;">
+                        <a><?php echo $apiInfo['url']?></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="info-head">具体地址</td>
+                <td class="info-body">
                     正式：
-                    <span style="font-size: 20px;font-weight: bolder;">
+                    <span style="font-size: 15px;font-weight: bolder;">
                         <a><?php echo $servInfo['product_server'].$apiInfo['url']?></a>
                     </span><br/>
                     测试：
-                    <span style="font-size: 20px;font-weight: bolder;">
+                    <span style="font-size: 15px;font-weight: bolder;">
                         <a><?php echo $servInfo['test_server'].$apiInfo['url']?></a>
                     </span>
                 </td>

@@ -38,7 +38,7 @@ class CommentParser
                     static::parseLine($api,$line);
                 }
                 if(!$api['module']) {
-                    $api['module'] = $module ?: APP::getAppConf($app)->getModName($mod);
+                    $api['module'] = $module ?: '未归类接口';
                 }
                 $api['md5'] = md5($api['url'].$api['method']);
                 $info[] = $api;
