@@ -118,5 +118,11 @@
             </tbody>
         </table>
     </div>
+    <div class="col-md-12" style="padding: 0;margin-top: 30px;">
+        <div style="width: 100%;height: 30px;font-size: 20px;font-weight: bold;">响应说明</div>
+        <div class="alert alert-danger" style="font-size: 16px;margin-bottom: 50px;">
+            <pre><?php echo $responseDesc?></pre>
+        </div>
+    </div>
 </body>
 </html>

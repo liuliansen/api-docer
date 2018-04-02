@@ -15,17 +15,17 @@ class CommentParser
         $content = file_get_contents($file);
         if(preg_match_all("#\/\*{2}(.*)\*\/#sSU",$content,$m) && isset($m[1])){
             $info = [];
-            $package = '';
+            $module = '';
             foreach ($m[1] as $comm){
-                if(empty($info) && preg_match('#@package\s+(.*)#m',$comm,$m)){
-                    $package = $m[1];
+                if($module === '' && preg_match('#@module\s+(.*)#m',$comm,$m)){
+                    $module = trim($m[1]);
                 }
                 if(!preg_match('#@url#m',$comm) || !preg_match('#@method#m',$comm)) continue;
                 $lineEOF = (strpos($comm,"\r\n") === false) ? "\n":"\r\n";
                 $lines = explode($lineEOF,$comm);
                 $api = [
                     'description' => [],
-                    'package'     => '',
+                    'module'     => '',
                     'title'       => '',
                     'url'         => '',
                     'method'      => '',
@@ -37,8 +37,8 @@ class CommentParser
                 foreach ($lines as $line){
                     static::parseLine($api,$line);
                 }
-                if(!$api['package']) {
-                    $api['package'] = $package ?: APP::getAppConf($app)->getModName($mod);
+                if(!$api['module']) {
+                    $api['module'] = $module ?: APP::getAppConf($app)->getModName($mod);
                 }
                 $api['md5'] = md5($api['url'].$api['method']);
                 $info[] = $api;
@@ -64,10 +64,13 @@ class CommentParser
                 switch ($m[1]) {
                     case 'title':
                     case 'author':
-                    case 'package':
+                    case 'module':
                     case 'url':
                     case 'method':
                         $api[$m[1]] =  $m[2];
+                        break;
+                    case 'description':
+                        $api['description'][] = $m[2];
                         break;
                     case 'docreturn':
                         $api['return'][] = $m[2];

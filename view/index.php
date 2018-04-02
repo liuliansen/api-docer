@@ -14,7 +14,7 @@
     <!--CUSTOM MAIN STYLES-->
     <link href="/assets/css/custom.css" rel="stylesheet" />
     <!-- GOOGLE FONTS-->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+<!--    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />-->
 </head>
 <body style="width: 100%">
 <div style="width:100%;height:100%;display:flex;">
@@ -41,8 +41,7 @@
                                 <ul class="nav nav-second-level">
                                     <?php foreach ($item as $md5 => $title) { ?>
                                         <li>
-                                            <a class="api-url" href="#" data-url="/<?php echo $app,'/',$mod,'/',$md5 ?>">
-                                                <i class="fa fa-toggle-on"></i>
+                                            <a class="api-url" href="#" data-url="/<?php echo $app,'/',$mod,'/',$md5,'?_doc=',mt_rand(1000,9999) ?>">                                                <i class="fa fa-toggle-on"></i>
                                                 <?php echo $title?>
                                             </a>
                                         </li>
@@ -104,15 +103,21 @@
 
 
     $('#btn-search').click(function(e){
-
+        var keyWord = $.trim($('#input-search').val());
+        search(keyWord);
     });
     $('#input-search').keypress(function(e){
-        
+        if(e.keyCode === 13){
+            var keyWord = $.trim($(this).val());
+            search(keyWord);
+        }
     });
 
-    function search()
+    function search(keyWord)
     {
-
+        if(keyWord=='') return false;
+        $('#api-page').attr('src',"/<?php echo $app,'/',$mod,'/__search?key-word=' ?>"+encodeURI(keyWord));
+        $('#input-search').val('');
     }
 </script>
 </html>

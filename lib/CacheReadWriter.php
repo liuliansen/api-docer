@@ -210,10 +210,14 @@ class CacheReadWriter
                 if($json) {
                     $apis = iterable2Array($json);
                     foreach ($apis as $api){
-                        if(isset($modules[$api['package']])){
-                            $modules[$api['package']][md5($api['url'].$api['method'])] = $api['title'];
+                        //                        if($api['module']=='测试'){
+//                            var_dump($api);
+//                            var_dump($modules[$api['module']]);
+//                        }
+                        if(isset($modules[$api['module']])){
+                            $modules[$api['module']][md5($api['url'].$api['method'])] = $api['title'];
                         }else{
-                            $modules[$api['package']] = [
+                            $modules[$api['module']] = [
                                 md5($api['url'].$api['method']) => $api['title']
                             ];
                         }
@@ -241,6 +245,27 @@ class CacheReadWriter
             }
         }
         return [];
+    }
+
+    /**
+     * 查询包含关键字的api列表
+     * @param $keyWord
+     * @return array
+     */
+    static public function searchApi($app,$mod,$keyWord)
+    {
+        if(!$keyWord) return [];
+        $apiList = CacheReadWriter::getListCache($app,$mod);
+        $result = [];
+        foreach ($apiList as $moduleList){
+            foreach ($moduleList as $md5 => $api){
+                if(preg_match("/{$keyWord}/i",$api)){
+                    $info = CacheReadWriter::getApiCache($app,$mod,$md5);
+                    $result[] = $info;
+                }
+            }
+        }
+        return $result;
     }
 
 }

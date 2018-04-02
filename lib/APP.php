@@ -64,7 +64,13 @@ class APP
     static public function run($app,$mod,$api)
     {
         ob_clean();
-        $conf = APP::getAppConf($app);
+        try{
+            $conf = APP::getAppConf($app);
+        }catch (\ReflectionException $e){
+            self::response(404);
+            exit;
+        }
+
         if($api){
             $servInfo = $conf->getServerInfo();
             if($api == '__main'){
@@ -77,16 +83,48 @@ class APP
                 $globalAppParams = $conf->getGlobalAppParams();
                 $globalApiParams = $conf->getGlobalApiParams();
                 $globalDesc      = $conf->getGlobalDesc();
+                $responseDesc    = $conf->getResponseDesc();
                 require VIEW_PATH . 'main.php';
             }elseif($api == '__search'){
+                $keyWord = isset($_GET['key-word'])? trim($_GET['key-word']) :'';
+                $apiList = CacheReadWriter::searchApi($app,$mod,$keyWord);
+                $result = [];
+                foreach ($apiList as $api){
+                    if(isset($result[$api['module']])){
+                        $result[$api['module']][] = $api;
+                    }else{
+                        $result[$api['module']] = [$api];
+                    }
+                }
                 require VIEW_PATH . 'search.php';
             }else{
                 $apiInfo = CacheReadWriter::getApiCache($app,$mod,$api);
+                $apiInfo['return'] = $conf->getResponseFormat($apiInfo['return']);
+                $globalApiParams = $conf->getGlobalApiParams();
+
+                foreach ($globalApiParams as $param){
+                    $found = false;
+                    foreach ($apiInfo['param'] as $apiParam){
+                        if($param['name'] == $apiParam['name']){
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if(!$found) array_unshift($apiInfo['param'],$param);
+                }
+                if(!$apiInfo){
+                    self::response(404);
+                    exit;
+                }
                 require VIEW_PATH . 'api.php';
             }
         }else{
             try {
                 $files = FileReader::getModuleFiles($app, $mod);
+                if(!$files){
+                    self::response(404);
+                    exit;
+                }
             }catch (\ReflectionException $ex){
                 self::response(404);
                 exit;
@@ -94,7 +132,7 @@ class APP
             CacheReadWriter::createRunCache($app,$mod,$files);
             $modName = $conf->getModName($mod);
             $list = CacheReadWriter::getListCache($app,$mod);
-            $appModuleName = $conf->getModName($mod);
+            $appModuleName = '未归类接口';
             require VIEW_PATH . 'index.php';
         }
         ob_end_flush();

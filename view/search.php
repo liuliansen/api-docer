@@ -26,38 +26,45 @@
     </style>
 </head>
 <body style=";padding: 5px;">
-    <div class="col-md-12" style="padding: 0;margin-top: 30px;">
-        <div style="width: 100%;height: 30px;font-size: 20px;font-weight: bold;">文档说明</div>
-        <div class="alert alert-danger" style="font-size: 16px;margin-bottom: 50px;"><?php echo $globalDesc?></div>
-    </div>
     <div class="col-md-12" style="padding: 0;">
-        <div style="width: 100%;height: 30px;font-size: 20px;font-weight: bold;">系统级全局请求参数</div>
+        <div style="width: 100%;height: 30px;font-size: 20px;font-weight: bold; text-align: center;">所有名称包含关键字："<?php echo $keyWord?>" 的接口</div>
         <table class="table table-hover alert alert-success">
             <thead>
             <tr>
                 <th>#</th>
-                <th>参数名称</th>
-                <th>参数类型</th>
-                <th>是否必须</th>
-                <th>默认值</th>
-                <th>参数说明</th>
+                <th>接口模块</th>
+                <th>接口名称</th>
+                <th>接口地址</th>
             </tr>
             </thead>
             <tbody>
-            <?php for ($i=0; $i<count($globalAppParams); $i++){?>
-                <tr>
-                    <td><?php echo $i+1?></td>
-                    <td><?php echo $globalAppParams[$i]['name']?></td>
-                    <td><?php echo $globalAppParams[$i]['type']?></td>
-                    <td><?php echo $globalAppParams[$i]['require']?></td>
-                    <td><?php echo $globalAppParams[$i]['default']?></td>
-                    <td><?php echo $globalAppParams[$i]['desc']?></td>
-                </tr>
+            <?php $i = 1;?>
+            <?php foreach ($result as $list){?>
+                <?php foreach ($list as $api){?>
+                    <tr>
+                        <td><?php echo $i++?></td>
+                        <td><?php echo $api['module']?></td>
+                        <td>
+                            <a  href="#" data-url="/<?php echo $app,'/',$mod,'/',$api['md5'] ?>">
+                                <?php echo $api['title']?>
+                            </a>
+                        </td>
+                        <td>
+                            <a  href="#" data-url="/<?php echo $app,'/',$mod,'/',$api['md5'] ?>">
+                                <?php echo $api['url']?>
+                            </a>
+                        </td>
+                    </tr>
+                <?php }?>
             <?php }?>
             </tbody>
         </table>
     </div>
-
-
 </body>
 </html>
+<script src="/assets/js/jquery-1.10.2.js"></script>
+<script>
+    $('a').click(function(){
+       window.location.href = $(this).data('url');
+    });
+</script>

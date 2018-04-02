@@ -24,6 +24,8 @@ abstract class Base
     protected $globalAppParams = [ ];
     protected $globalApiParams = [ ];
     protected $globalDesc      = '';
+    protected $responseDesc    = '';
+    protected $responseFormat  = '';
 
     public function getRoot()
     {
@@ -33,6 +35,16 @@ abstract class Base
     public function getGlobalDesc()
     {
         return $this->globalDesc;
+    }
+
+    public function getResponseDesc()
+    {
+        return $this->responseDesc;
+    }
+
+    public function getResponseFormat($data = '')
+    {
+        return $this->responseFormat;
     }
 
     public function get($mod)
