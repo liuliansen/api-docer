@@ -77,7 +77,14 @@ class CommentParser
                         break;
                     case 'param':
                         $set =  explode(' ',$m[2]);
-                        $info = [];
+                        $info = [
+                            'name'    => '',
+                            'require' => 0,
+                            'type'    => 'string',
+                            'default' => '',
+                            'desc'    => '',
+
+                        ];
                         foreach ($set as $s){
                             if(!$s) continue;
                             $index = strpos($s,':');
