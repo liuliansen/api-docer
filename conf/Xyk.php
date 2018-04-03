@@ -17,10 +17,10 @@ class Xyk extends Base
 
     ];
 
-    protected $root = '/var/www/html/tp5/application/';
+    protected $root = 'D:\\www\\tp5\\application\\appclient\\controller\\';
 
     protected $modules = [
-        'default' => '/\/var\/www\/html\/tp5\/application\/appclient\/controller\/.*\.php/',
+        'default' => '/D:\\\www\\\tp5\\\application\\\appclient\\\controller\\\.*\\.php/',
     ];
 
     protected $moduleNames = [
@@ -89,7 +89,7 @@ EOT;
 }
 EOT;
 
-    public function getResponseFormat($data)
+    public function getResponseFormat($data = '')
     {
         $return = '';
         foreach ($data as $row){
