@@ -63,7 +63,7 @@
     </div>
     <div style="float:left;flex:1;height: 100%;position: relative;padding-top: 50px;background: #ccc;">
         <div style="width:100%;height:50px;position:absolute;top:0;left:0;color:#ffffff;font-size:20px;font-weight:bolder;background: #0000ff;">
-            <div style="float: right;margin-right: 20px;height: 100%;margin-top: 10px;">
+            <div style="float: right;width:200px;margin-right: 20px;height: 100%;margin-top: 10px;">
                 <div class="input-group" >
                     <input type="text" placeholder="输入关键字查询" class="form-control" id="input-search">
                     <span class="form-group input-group-btn">
