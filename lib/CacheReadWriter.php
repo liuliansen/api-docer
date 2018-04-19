@@ -119,19 +119,23 @@ class CacheReadWriter
      * @param $app
      * @param $mod
      * @param $files
+     * @param $conf
      * @return bool
      */
-    static public function createRunCache($app,$mod,$files)
+    static public function createRunCache($app,$mod,$files,$conf)
     {
         $cacheFiles = static::getFileInfoCache($app,$mod);
         $updated = false; //是否有新的更新
+        $start = microtime(1);
         foreach ($files as $file => $mTime){
             if(!isset($cacheFiles[$file]) || $cacheFiles[$file] < $mTime){ //需要生成新的缓存
                 $updated = true;
-                $info = CommentParser::parse($app,$mod,$file);
+                $info = CommentParser::parse($app,$mod,$file,$conf);
                 static::writeApiFileCache($app,$mod,$file,$info);
             }
         }
+        echo "<br>内容获取:".(microtime(1)-$start);
+        exit;
         if($updated) {
             static::updateFileInfoCache($app,$mod,$files);
             static::updateApiIndexCache($app,$mod);

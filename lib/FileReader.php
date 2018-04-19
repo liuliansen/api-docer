@@ -8,18 +8,19 @@
 //+-------------------------------------------------------------
 namespace lib;
 
+use conf\Base;
+
 class FileReader
 {
 
     /**
-     * @param $app
+     * @param Base $conf
      * @param $modName
      * @return array|null
      * @throws \ReflectionException
      */
-    static public function getModuleFiles($app,$modName)
+    static public function getModuleFiles($conf,$modName)
     {
-        $conf = APP::getAppConf($app);
         $modConf = $conf->get($modName);
         if(is_null($modConf)){
             return  null;

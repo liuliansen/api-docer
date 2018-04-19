@@ -19,7 +19,7 @@ class APP
      * 默认doc项目
      * @var string
      */
-    static private $default = 'Xyk';
+    static private $default = 'Def';
 
     static private function getPath()
     {
@@ -68,7 +68,6 @@ class APP
             $conf = APP::getAppConf($app);
         }catch (\ReflectionException $e){
             self::response(404);
-            exit;
         }
 
         if($api){
@@ -120,16 +119,26 @@ class APP
             }
         }else{
             try {
-                $files = FileReader::getModuleFiles($app, $mod);
+                $conf = self::getAppConf($app);
+                switch ($conf->getReadType()){
+                    case 'local':
+                        $files = FileReader::getModuleFiles($conf, $mod);
+                        break;
+                    case 'ssh':
+                        $files = RemoteReader::getModuleFiles($conf, $mod);
+                        break;
+                    default: $files = null;
+                }
+
                 if(!$files){
                     self::response(404);
-                    exit;
                 }
             }catch (\ReflectionException $ex){
                 self::response(404);
-                exit;
+            }catch (\Throwable $e){
+                self::response(404,$e->getMessage().PHP_EOL.$e->getTraceAsString());
             }
-            CacheReadWriter::createRunCache($app,$mod,$files);
+            CacheReadWriter::createRunCache($app,$mod,$files,$conf);
             $modName = $conf->getModName($mod);
             $list = CacheReadWriter::getListCache($app,$mod);
             $appModuleName = $conf->getModName($mod);
@@ -143,7 +152,8 @@ class APP
         ob_clean();
         if($httpcode == 404) {
             header("HTTP/1.1 404 Not Found");
-            echo file_get_contents(VIEW_PATH .'404.html');
+            echo str_replace('{message}',$content,file_get_contents(VIEW_PATH .'404.html'));
+            exit;
         }
         ob_end_flush();
     }

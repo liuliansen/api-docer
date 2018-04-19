@@ -51,7 +51,7 @@ function getModuleFiles($root,$modConf)
     $files = [];
     if(is_string($modConf)){
         //模块文件列表是正则表达式
-        if(preg_match("/^\/.*\/i?$/",$modConf)){
+        if(preg_match("/^\/(\*|\?)\/i?$/",$modConf)){
             $_files = recursiveGetFiles($root);
             foreach ($_files as $file){
                 if(preg_match($modConf,$file))
@@ -130,6 +130,21 @@ function iterable2Array($data)
         $arr[$k] = (is_object($v) || is_array($v)) ? iterable2Array($v) : $v;
     }
     return $arr;
+}
+
+
+/**
+ * 去除最后的目录符
+ * @param $path      路径
+ * @param string $ds 目录符
+ * @return bool|string
+ */
+function trimLastDS($path, $ds = '/')
+{
+    if(substr($path,-1) == $ds){
+        $path = substr($path,0,-1);
+    }
+    return $path;
 }
 
 

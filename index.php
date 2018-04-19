@@ -6,14 +6,15 @@
 //+-------------------------------------------------------------
 //| Date 2018-02-07
 //+-------------------------------------------------------------
-require __DIR__.DIRECTORY_SEPARATOR.'autoload.php';
+
 use lib\APP;
+require __DIR__.DIRECTORY_SEPARATOR.'autoload.php';
 
-define('ROOT_PATH'      , __DIR__ . DIRECTORY_SEPARATOR);
-define('RUN_TIME_PATH'  , ROOT_PATH.'runtime'.DIRECTORY_SEPARATOR);
-define('CACHE_PATH'     , RUN_TIME_PATH .'cache'.DIRECTORY_SEPARATOR);
-define('VIEW_PATH'      , ROOT_PATH .'view'.DIRECTORY_SEPARATOR);
-
+define('DS', DIRECTORY_SEPARATOR);
+define('ROOT_PATH'      , __DIR__ . DS);
+define('RUN_TIME_PATH'  , ROOT_PATH.'runtime'.DS);
+define('CACHE_PATH'     , RUN_TIME_PATH .'cache'.DS);
+define('VIEW_PATH'      , ROOT_PATH .'view'.DS);
 APP::init();
 
 

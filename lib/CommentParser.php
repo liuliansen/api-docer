@@ -8,11 +8,24 @@
 //+-------------------------------------------------------------
 namespace lib;
 
+use conf\Base;
+
 class CommentParser
 {
-    static public function parse($app,$mod,$file)
+    static public function parse($app,$mod,$file,Base $conf)
     {
-        $content = file_get_contents($file);
+        switch ($conf->getReadType()){
+            case 'local':
+                $content = file_get_contents($file);
+                break;
+            case 'ssh':
+                $sshHelper = SSHHelper::getInstance($conf);
+                $content = $sshHelper->getFileContent($file);
+                break;
+            default:
+                throw new \Exception('不支持的源码读取模式');
+        }
+
         if(preg_match_all("#\/\*{2}(.*)\*\/#sSU",$content,$m) && isset($m[1])){
             $info = [];
             $module = '';
