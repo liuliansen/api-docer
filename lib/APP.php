@@ -101,6 +101,7 @@ class APP
                 $apiInfo['return'] = $conf->getResponseFormat($apiInfo['return']);
                 $globalApiParams = $conf->getGlobalApiParams();
 
+                if(is_null($apiInfo['param'])) $apiInfo['param']= [];
                 foreach ($globalApiParams as $param){
                     $found = false;
                     foreach ($apiInfo['param'] as $apiParam){
@@ -156,6 +157,11 @@ class APP
             exit;
         }
         ob_end_flush();
+    }
+
+    static public function getSSHReadBinName()
+    {
+        return strtolower(PHP_OS) == 'linux' ? 'ssh-read':'ssh-read-win';
     }
 
 }

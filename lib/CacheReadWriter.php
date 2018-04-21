@@ -8,6 +8,8 @@
 //+-------------------------------------------------------------
 namespace lib;
 
+use conf\Base;
+
 class CacheReadWriter
 {
 
@@ -98,6 +100,7 @@ class CacheReadWriter
     {
         $indexCacheFile = static::getFileInfoCacheFile($app,$mod,'index');
         $data = file_get_contents($indexCacheFile);
+
         if($data) {
             if(($json = json_decode($data)) && $json){
                 $arr = iterable2Array($json);
@@ -119,29 +122,49 @@ class CacheReadWriter
      * @param $app
      * @param $mod
      * @param $files
-     * @param $conf
+     * @param Base $conf
      * @return bool
      */
     static public function createRunCache($app,$mod,$files,$conf)
     {
-        $cacheFiles = static::getFileInfoCache($app,$mod);
-        $updated = false; //是否有新的更新
-        $start = microtime(1);
-        foreach ($files as $file => $mTime){
-            if(!isset($cacheFiles[$file]) || $cacheFiles[$file] < $mTime){ //需要生成新的缓存
-                $updated = true;
-                $info = CommentParser::parse($app,$mod,$file,$conf);
-                static::writeApiFileCache($app,$mod,$file,$info);
+        try {
+            $cacheFiles = static::getFileInfoCache($app, $mod);
+            $updated = false; //是否有新的更新
+            if ($conf->getReadType() == 'ssh') {
+                $start = microtime(1);
+                $readFiles = [];
+                foreach ($files as $file => $mTime) {
+                    if (!isset($cacheFiles[$file]) || $cacheFiles[$file] < $mTime) { //需要生成新的缓存
+                        $updated = true;
+                        $readFiles[] = $file;
+                    }
+                }
+                if ($updated) {
+                    $cacheDir = CacheReadWriter::getFilesCacheDir($app, $mod);
+                    $readConf = str_replace("\"", "\\\"",
+                        json_encode(['cache_dir' => $cacheDir, 'files' => $readFiles], JSON_UNESCAPED_UNICODE));
+                    $ssh = $conf->getSshInfo();
+                    @exec(ROOT_PATH . "ssh-read -h {$ssh['host']} -P {$ssh['port']} -u {$ssh['user']} -p {$ssh['password']} -m read -c \"{$readConf}\"");
+                }
+            } else {
+                foreach ($files as $file => $mTime) {
+                    if (!isset($cacheFiles[$file]) || $cacheFiles[$file] < $mTime) { //需要生成新的缓存
+                        $updated = true;
+                        $info = CommentParser::parse($app, $mod, $file, $conf);
+                        static::writeApiFileCache($app, $mod, $file, $info);
+                    }
+                }
             }
+            if ($updated) {
+                static::updateFileInfoCache($app, $mod, $files);
+                static::updateApiIndexCache($app, $mod);
+                static::createListCache($app, $mod);
+            }
+            return true;
+        }catch (\Throwable $e){
+
+            var_dump($e->getMessage());
         }
-        echo "<br>内容获取:".(microtime(1)-$start);
-        exit;
-        if($updated) {
-            static::updateFileInfoCache($app,$mod,$files);
-            static::updateApiIndexCache($app,$mod);
-            static::createListCache($app,$mod);
-        }
-        return true;
     }
 
     /**
@@ -164,6 +187,17 @@ class CacheReadWriter
     }
 
     /**
+     * 获取模块源码解析缓存文件夹
+     * @return string
+     */
+    static public function getFilesCacheDir($app,$mod)
+    {
+        $cacheDir = static::getAppModCachePath($app, $mod).'files';
+        if(!is_dir($cacheDir)) @mkdir($cacheDir,0777, true);
+        return $cacheDir;
+    }
+
+    /**
      * 将文件提取到的接口信息写入到文件缓存
      * @param $app
      * @param $mod
@@ -172,9 +206,8 @@ class CacheReadWriter
      */
     static public function writeApiFileCache($app,$mod,$file,$info)
     {
-        $cacheDir = static::getAppModCachePath($app, $mod).'files';
-        if(!is_dir($cacheDir)) @mkdir($cacheDir,0777, true);
-        $cacheFile = $cacheDir.DIRECTORY_SEPARATOR.md5($file).'.cache';
+
+        $cacheFile = static::getFilesCacheDir($app,$mod).DIRECTORY_SEPARATOR.md5($file).'.cache';
         file_put_contents($cacheFile, json_encode($info,JSON_UNESCAPED_UNICODE));
     }
 

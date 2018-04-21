@@ -14,29 +14,41 @@ class RemoteReader
 {
     static public function getModuleFiles(Base $conf,$mod)
     {
-        $sshHelper = SSHHelper::getInstance($conf);
+//        $sshHelper = SSHHelper::getInstance($conf);
         $modConf = $conf->get($mod);
-        $files = null;
-        $start = microtime(1);
+        $files = [];
         switch (gettype($modConf)){
             case 'array':
-                    $files = $sshHelper->getFilesLastModifyTimeStamp($modConf);
+                $modConf = str_replace("\"","\\\"",json_encode($modConf,JSON_UNESCAPED_UNICODE));
+//                    $files = $sshHelper->getFilesLastModifyTimeStamp($modConf);
                     break;
             case  'string':
-                    if(preg_match("/^\/.*[\*|\?].*\/i?$/",$modConf)){ //正则
-                        throw new \Exception('远程模式下禁用正则指定源码路径');
-                    }elseif($sshHelper->isFile($modConf)){
-                        $files[$modConf] = $sshHelper->getLastModifyTimeStamp($modConf);
-
-                    }elseif($sshHelper->isDir($modConf)){
-                        $files = $sshHelper->getFilesLastModifyTimeStamp(
-                                                $sshHelper->getRegularFiles($modConf));
-
-                    }
+//                    if(preg_match("/^\/.*[\*|\?].*\/i?$/",$modConf)){ //正则
+//                        throw new \Exception('远程模式下禁用正则指定源码路径');
+//                    }elseif($sshHelper->isFile($modConf)){
+//                        $files[$modConf] = $sshHelper->getLastModifyTimeStamp($modConf);
+//
+//                    }elseif($sshHelper->isDir($modConf)){
+//                        $files = $sshHelper->getFilesLastModifyTimeStamp(
+//                                                $sshHelper->getRegularFiles($modConf));
+//
+//                    }
+                $modConf = str_replace("\"","\\\"",json_encode([$modConf],JSON_UNESCAPED_UNICODE));
                     break;
-            default:throw new \Exception('模块源码文件配置错误');
+            default:throw new \Exception('模块源码路径配置错误');
         }
-        echo "获取文件列表:".(microtime(1)- $start).'<br>';
-        return $files;
+        $ssh = $conf->getSshInfo();
+        $bin = APP::getSSHReadBinName();
+
+        @exec(ROOT_PATH ."{$bin} -h {$ssh['host']} -P {$ssh['port']} -u {$ssh['user']} -p {$ssh['password']} -m info -c {$modConf}",$out,$return);
+        foreach ($out as $row){
+            $json = json_decode($row);
+            if($json){
+               $arr = iterable2Array($json);
+               $file = array_keys($arr)[0];
+               $files[$file] = $arr[$file];
+            }
+        }
+        return $files ?: null;
     }
 }
