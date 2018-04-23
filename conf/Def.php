@@ -14,8 +14,8 @@ class Def extends Base
     protected $readType = 'local';
 
     protected $serverInfo = [
-        'product_server' => 'http://xykapi.jrweid.com',
-        'test_server' => 'http://112.124.104.103:8080',
+        'product_server' => 'http://open.test.com',
+        'test_server'    => 'http://test.test.com',
 
     ];
 
@@ -28,7 +28,7 @@ class Def extends Base
     ];
 
     protected $moduleNames = [
-        'default' => '要点信用卡'
+        'default' => '演示项目'
     ];
 
     protected $globalAppParams = [
@@ -75,7 +75,7 @@ class Def extends Base
     protected $globalDesc =
 <<<EOT
 “<span style="color:red;">系统级</span>全局请求参数” 可以看做接口统一的请求格式， 在具体接口文档无特别说明时每个接口都必须提供。<br/>
-如在接口：“http://xykapi.jrweid.com/api/v1/user-cards?data=xxxxxxx&iv=1234567812345678” 中，data和iv都是必须向系统提供的参数。<br/>
+如在接口：“http://open.test.com/api/v1/user-cards?data=xxxxxxx&iv=1234567812345678” 中，data和iv都是必须向系统提供的参数。<br/>
 “<span style="color:red;">接口级</span>全局请求参数” 是被包含在系统级参数“data”中的。<br/>
 由于在绝大多数接口中都会依赖到这些参数，所以<span style="color:red;">每当提供系统级参数data时，data中都必须包含接口级参数</span>
 EOT;
@@ -121,11 +121,11 @@ EOT;
         return $iv;
     }
 
-    protected $sslKey = 'e10adc3949ba59abbe56e057f20f883e';
+    protected $sslKey = 'asdfsdc3949ba59abbe56e057f20f883';
 
-    public function getApiRequestParams($param)
+    public function getApiRequestParams($params =[])
     {
-        $data = json_encode($param,JSON_UNESCAPED_UNICODE);
+        $data = json_encode($params,JSON_UNESCAPED_UNICODE);
         $iv = $this->getIv();
         return [
             'data' => base64_encode(openssl_encrypt($data,'AES-256-CBC',$this->sslKey,OPENSSL_RAW_DATA ,$iv)),

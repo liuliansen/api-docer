@@ -58,7 +58,7 @@
             </nav>
         </div>
         <div style="position:absolute;bottom:0;left:0;width:100%;height:20px;font-weight:bolder;line-height:20px;background: #ccc;">
-            ©我爱微点-LianSen&lt;liansen@d3zz.com&gt;
+            ©LianSen&lt;liansen@d3zz.com&gt;
         </div>
     </div>
     <div style="float:left;flex:1;height: 100%;position: relative;padding-top: 50px;background: #ccc;">
