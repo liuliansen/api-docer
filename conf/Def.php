@@ -112,12 +112,38 @@ EOT;
 
 
     }
+    protected function getIv()
+    {
+        $iv = '';
+        for ($i = 0;$i<16;$i++){
+            $iv .= mt_rand(0,9);
+        }
+        return $iv;
+    }
 
+    protected $sslKey = 'e10adc3949ba59abbe56e057f20f883e';
 
     public function getApiRequestParams($param)
     {
+        $data = json_encode($param,JSON_UNESCAPED_UNICODE);
+        $iv = $this->getIv();
         return [
-            'data' => json_encode($param,JSON_UNESCAPED_UNICODE)
+            'data' => base64_encode(openssl_encrypt($data,'AES-256-CBC',$this->sslKey,OPENSSL_RAW_DATA ,$iv)),
+            'iv'  => $iv
         ];
+    }
+
+    public function getApiResponse($response){
+        try{
+            $json = json_decode($response);
+            if(!$json){
+                return $response;
+            }
+            $data = openssl_decrypt(base64_decode($json->data),'AES-256-CBC',$this->sslKey,OPENSSL_RAW_DATA,$json->iv);
+            $json->data = json_decode($data);
+            return json_encode($json,JSON_UNESCAPED_UNICODE);
+        }catch (\Exception $e){
+            return $response;
+        }
     }
 }
