@@ -12,13 +12,13 @@ func main() {
 	user := flag.String("u", "", "ssh user")
 	password := flag.String("p", "", "ssh user's password")
 	worktype := flag.String("m", "", "this work called method (\"info\" or \"read\")")
-	configure := flag.String("c", "", "his work configure as json string")
+	configure := flag.String("c", "", "this work configure as json string")
 	flag.Parse()
 	if *worktype == "info" {
 		sshread.GetFilesTimestamp(*host, *port, *user, *password, configure)
 	} else if *worktype == "read" {
 		sshread.CreateFilesCache(*host, *port, *user, *password, configure)
 	} else {
-		fmt.Println("Unknow -t value")
+		fmt.Println("Unknow -m value")
 	}
 }

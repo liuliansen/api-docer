@@ -109,4 +109,25 @@ abstract class Base
     {
         return $this->globalApiParams;
     }
+
+    /**
+     * 将在线测试参数转换成对应系统api参数格式
+     * @param array $param api调用测试传递的请求参数
+     * @return mixed
+     */
+    public function getApiRequestParams($param)
+    {
+        return $param;
+    }
+
+
+    /**
+     * 获取api测试响应数据
+     * @param $response
+     * @return mixed
+     */
+    public function getApiResponse($response){
+        return $response;
+    }
+
 }

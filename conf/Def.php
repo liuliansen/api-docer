@@ -114,4 +114,10 @@ EOT;
     }
 
 
+    public function getApiRequestParams($param)
+    {
+        return [
+            'data' => json_encode($param,JSON_UNESCAPED_UNICODE)
+        ];
+    }
 }

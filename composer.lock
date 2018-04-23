@@ -1,0 +1,81 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "c302970ccab0ac147dd072d604b80bd0",
+    "packages": [
+        {
+            "name": "liuliansen/api-framework",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/liuliansen/api-framework.git",
+                "reference": "a9fbc7464c7a859176d116d5deeab4ece48ee459"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/liuliansen/api-framework/zipball/a9fbc7464c7a859176d116d5deeab4ece48ee459",
+                "reference": "a9fbc7464c7a859176d116d5deeab4ece48ee459",
+                "shasum": ""
+            },
+            "require": {
+                "liuliansen/httprequest": "1.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "api\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "LianSen",
+                    "email": "liansen@d3zz.com"
+                }
+            ],
+            "description": "An simple api framework.",
+            "time": "2018-01-26T07:08:14+00:00"
+        },
+        {
+            "name": "liuliansen/httprequest",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/liuliansen/httprequest.git",
+                "reference": "98f24fb675624aae24c41d3f4bfd6c7747e98ef6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/liuliansen/httprequest/zipball/98f24fb675624aae24c41d3f4bfd6c7747e98ef6",
+                "reference": "98f24fb675624aae24c41d3f4bfd6c7747e98ef6",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "httprequest\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "LianSen",
+                    "email": "liansen@d3zz.com"
+                }
+            ],
+            "description": "A PHP Http request library ",
+            "time": "2018-01-26T07:05:30+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

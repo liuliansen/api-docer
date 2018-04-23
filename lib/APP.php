@@ -96,6 +96,9 @@ class APP
                     }
                 }
                 require VIEW_PATH . 'search.php';
+            }elseif($api == '__call'){ //api调用测试
+                echo  ApiCall::call($conf,$app,$mod,$_GET['api'],$_POST);
+                exit;
             }else{
                 $apiInfo = CacheReadWriter::getApiCache($app,$mod,$api);
                 $apiInfo['return'] = $conf->getResponseFormat($apiInfo['return']);

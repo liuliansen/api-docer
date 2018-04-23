@@ -1,0 +1,5 @@
+{
+    "require": {
+        "liuliansen/api-framework": "^1.0"
+    }
+}

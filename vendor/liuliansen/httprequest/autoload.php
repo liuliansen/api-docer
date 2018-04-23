@@ -1,16 +1,15 @@
 <?php
 //+-------------------------------------------------------------
-//| 注册类加载函数
+//| 
 //+-------------------------------------------------------------
 //| Author Liu LianSen <liansen@d3zz.com> 
 //+-------------------------------------------------------------
-//| Date 2018-02-07
+//| Date 2018-01-26
 //+-------------------------------------------------------------
 
-require __DIR__.DIRECTORY_SEPARATOR."lib/common.php";
-require __DIR__.DIRECTORY_SEPARATOR."vendor/autoload.php";
-
 spl_autoload_register(function($clsName){
-    $file = __DIR__.DIRECTORY_SEPARATOR.str_replace('\\',DIRECTORY_SEPARATOR,$clsName).'.php';
-    if(is_file($file)) require $file;
+    $path = str_replace(['\\','httprequest'], [DIRECTORY_SEPARATOR,''],$clsName);
+    $file = __DIR__ . DIRECTORY_SEPARATOR . 'src'.DIRECTORY_SEPARATOR.$path.'.php';
+    if(file_exists($file))
+        require $file;
 });
