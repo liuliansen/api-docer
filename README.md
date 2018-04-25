@@ -5,19 +5,18 @@
 支持多个项目多个模块，通过增加在conf目录下增加conf\Base的子类增加需要管理的项目。
 
 注意： 
-     
-     如果需要接口在线测试功能，需要PHP安装了curl扩展
-     如果需要使用ssh管理远程源码生成文档，需要保证根目录下的ssh-read*程序能够运行。这个程序是使用golang写的，源码在ssh-read-src下
+* 如果需要接口在线测试功能，需要PHP安装了curl扩展
+* 如果需要使用ssh管理远程源码生成文档，需要保证根目录下的ssh-read*程序能够运行。这个程序是使用golang写的，源码在ssh-read-src下
 
 
 文档生成说明
-![alt 生成说明](assets/img/readmeimg/01.png)
+<img src="assets/img/readmeimg/01.png">
 
 接口源码注释说明
-文档生成说明
-![alt 生成说明](assets/img/readmeimg/02.png)
+<img src="assets/img/readmeimg/02.png">
 
-具体配置项目参见 conf::Base类注释
+
+具体配置项目参见 conf\Base类注释
 ~~~
 namespace conf;
 
