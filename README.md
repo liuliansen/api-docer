@@ -1,20 +1,25 @@
 <h1>程序说明</h1>
 
-本程序实现原理是通过扫描项目源码文件（同时支持通过SSH方式读取远程源码），项目源码中的注释文档生成在线接口文档。
+本程序实现原理是通过扫描项目源码文件（支持通过SSH方式读取远程源码），利用源码文件中的特定注释项生成在线接口文档。
 
-支持多个项目多个模块，通过增加在conf目录下增加conf\Base的子类增加需要管理的项目。
+支持多个项目多个模块，通过在conf目录下增加conf\Base的子类来增加需要管理的项目。
 
 注意： 
-* 如果需要接口在线测试功能，需要PHP安装了curl扩展
-* 如果需要使用ssh管理远程源码生成文档，需要保证根目录下的ssh-read*程序能够运行。这个程序是使用golang写的，源码在ssh-read-src下
+* 如果需要使用接口信息页面的 “在线测试” 功能，需要PHP安装了curl扩展。
+* 如果需要使用 SSH 通过远程源码生成文档，需要保证根目录下的ssh-read*程序能够运行。并且SSH用户具有源码目录读权限<br/>
+* ssh-read 这个程序是使用golang写的，如果无法直接使用本项目提供的程序，你可能需要在你机器上重新编译， 源码在ssh-read-src下。
 
+*****************************
 
 文档生成说明
 <img src="assets/img/readmeimg/01.png">
 
+*****************************
+
 接口源码注释说明
 <img src="assets/img/readmeimg/02.png">
 
+*****************************
 
 具体配置项目参见 conf\Base类注释
 ~~~
@@ -368,16 +373,20 @@ abstract class Base
 }
 ~~~
 
+*****************************
 
-##注释语法示例
+### 注释元素
+<table>
+    <tr><td>注释标签</td><td>说明</td><td>注释对象</td></tr>
+    <tr><td>@module</td><td>设置接口归属模块(在线文档的目录) </td><td>class, function</td></tr>
+    <tr><td>@url</td><td>设置接口地址</td><td>function</td></tr>
+    <tr><td> @method </td><td>设置请求方式（GET,POST...）</td><td>function</td></tr>
+    <tr><td> @author </td><td>设置接口作者）</td><td>function</td></tr>
+    <tr><td> @param </td><td>设置接口参数）</td><td>function</td></tr>
+    <tr><td> @docreturn </td><td>设置接口返回说明）</td><td>function</td></tr>    
+</table>
 
-|注释标签    | 说明                             |注释对象|<br/>
-| @module    | 设置接口归属模块(在线文档的目录) | class, function|<br/>
-| @url       | 设置接口地址                     | function|<br/>
-| @method    | 设置请求方式（GET,POST...）      | function|<br/>
-| @author    | 设置接口作者                     | function|<br/>
-| @param     | 设置接口参数                     | function|<br/>
-| @docreturn | 设置接口返回说明                 | function|<br/>
+### 注释示例
 ~~~
 <?php
 
@@ -410,7 +419,7 @@ class Sys extends AppController
      */
     public function serviceInfo()
     {
-
+        //your code....
     }
 }
 
